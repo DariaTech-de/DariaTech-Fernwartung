@@ -4,6 +4,13 @@ import 'package:flutter_hbb/common.dart';
 import 'package:flutter_hbb/models/state_model.dart';
 import 'package:get/get.dart';
 
+// Visible brand name (display only). The internal app identity stays
+// "RustDesk" (binary name, paths, URI scheme, service, registry) so that
+// rebranding does not affect runtime behavior.
+const String kAppBrandName = 'DariaTech Fernwartung';
+// Attribution shown in the UI for the underlying open-source project.
+const String kPoweredBy = 'Powered by RustDesk';
+
 const int kMaxVirtualDisplayCount = 4;
 const int kAllVirtualDisplay = -1;
 

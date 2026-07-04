@@ -1,0 +1,73 @@
+# DariaTech Fernwartung – Branding
+
+Diese Datei dokumentiert die Personalisierung von RustDesk zu **DariaTech Fernwartung**.
+
+## Konzept
+
+- **Sichtbarer Name** (Fenster­titel, App-Liste, Installer, About-Dialog): `DariaTech Fernwartung`
+- **Interne Identität** bleibt bewusst `rustdesk` / `RustDesk`
+  (Binärname `rustdesk.exe`, Datenverzeichnis, Dienst, Registry, URI-Schema `rustdesk://`).
+  Dadurch bricht kein Build und keine bestehende Logik.
+- Attribution **„Powered by RustDesk"** wird unten im Startbildschirm und im About-Dialog angezeigt
+  (Open-Source-Projekt fair gewürdigt).
+
+Der zentrale Anzeige-Name liegt in `flutter/lib/consts.dart` als `kAppBrandName`.
+
+## Bereits umgesetzt (Name)
+
+| Plattform | Datei | Feld |
+|-----------|-------|------|
+| Windows | `flutter/windows/runner/Runner.rc` | `ProductName`, `FileDescription`, `CompanyName`, `LegalCopyright` |
+| macOS | `flutter/macos/Runner/Info.plist` | `CFBundleDisplayName` |
+| Android | `flutter/android/app/src/main/AndroidManifest.xml` | `android:label` (App + Input-Service) |
+| Linux | `res/rustdesk.desktop`, `res/rustdesk-link.desktop` | `Name`, `Comment` |
+| In-App | `flutter/lib/consts.dart` (`kAppBrandName`, `kPoweredBy`) | Fenstertitel, Tab-Leiste, About-Dialog, Startbildschirm |
+
+## Logo & Icon – umgesetzt
+
+Logo und Icon wurden aus der gelieferten Logo-Datei abgeleitet:
+- **Logo** = der grüne Banner „DariaTech – IT Systemhaus" (aus dem Original ausgeschnitten).
+- **Icon** = das Chevron-/Rauten-Symbol (teal `#01C4A6` auf Grün `#09250F`), als Vektor
+  nachgebaut und in alle benötigten Größen gerendert.
+
+Markenfarben: Grün `#09250F`, Teal `#01C4A6`.
+
+### In-App (Flutter)
+
+| Datei | Inhalt |
+|-------|--------|
+| `flutter/assets/logo.png` | Header-Logo (Startbildschirm, `loadLogo()`) |
+| `flutter/assets/icon.png` | App-Icon, abgerundetes grünes Quadrat (`loadIcon()`) |
+| `flutter/assets/icon.svg` | App-Icon als Vektor (Fallback) |
+
+### Betriebssystem-Icons
+
+| Plattform | Datei(en) |
+|-----------|-----------|
+| Windows | `flutter/windows/runner/resources/app_icon.ico` (16–256) |
+| macOS | `flutter/macos/Runner/AppIcon.icns`, `res/mac-icon.png` |
+| Linux | `res/icon.png` (Master 1024), `res/icon.ico`, `res/32x32.png`, `res/64x64.png`, `res/128x128.png`, `res/128x128@2x.png` |
+| Android | `mipmap-*/ic_launcher.png`, `_round`, `_foreground` (alle DPI) + `values/ic_launcher_background.xml` = `#09250F` |
+| iOS | `AppIcon.appiconset/Icon-App-*.png` (opak, alle Größen) |
+
+### Tray-Icons
+
+| Datei | Verwendung |
+|-------|-----------|
+| `res/tray-icon.ico` | Windows-Tray (teal Symbol) |
+| `res/mac-tray-dark-x2.png`, `res/mac-tray-light-x2.png` | macOS-Tray (monochrom) |
+
+### Neu erzeugen
+
+Die Assets wurden mit Python (Pillow + cairosvg) generiert. Die Skripte liegen unter
+`tools/branding/` und können nach einer Logo-Aktualisierung erneut ausgeführt werden:
+
+```bash
+cd tools/branding
+python3 deploy_brand.py   # schreibt alle Asset-Dateien ins Repo
+```
+
+> Hinweis: `.gitignore` ignoriert `*png/*svg/*jpg`; neue Bilddateien müssen mit
+> `git add -f <datei>` aufgenommen werden (bereits getrackte werden normal aktualisiert).
+
+Nach Asset-Änderungen neu bauen (siehe `build.py` / `flutter/README.md`).

@@ -144,7 +144,17 @@ class _DesktopHomePageState extends State<DesktopHomePage>
                     children: children,
                   ),
                 ),
-                Expanded(child: Container())
+                Expanded(child: Container()),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 6, top: 4),
+                  child: Text(
+                    kPoweredBy,
+                    style: TextStyle(
+                      fontSize: 11,
+                      color: textColor?.withOpacity(0.5),
+                    ),
+                  ),
+                ),
               ],
             ),
             if (isOutgoingOnly)
