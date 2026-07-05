@@ -5,7 +5,10 @@
 // 'flutter create' template.
 
 // The application's name. By default this is also the title of the Flutter window.
-PRODUCT_NAME = DariaTech Fernwartung
+PRODUCT_NAME = DariaTech-Fernwartung
+
+// Swift-Modulname stabil halten: MainMenu.xib referenziert customModule="RustDesk"
+PRODUCT_MODULE_NAME = RustDesk
 
 // The application's bundle identifier
 PRODUCT_BUNDLE_IDENTIFIER = com.carriez.flutterHbb

@@ -40,7 +40,7 @@ Die Einrichtung dauert etwa 2 Minuten.
    - Öffnen Sie das Programm **Terminal** (über die Spotlight-Suche, Lupe oben rechts) und
      fügen Sie diese Zeile ein, dann Eingabetaste drücken:
      ```
-     xattr -cr "/Applications/DariaTech Fernwartung.app"
+     xattr -cr "/Applications/DariaTech-Fernwartung.app"
      ```
    - Starten Sie die App danach normal über den Programme-Ordner.
    - Alternativ: **Systemeinstellungen → Datenschutz & Sicherheit** → unten bei der

@@ -1006,6 +1006,13 @@ pub fn get_app_name() -> String {
 }
 
 #[inline]
+pub fn get_app_display_name() -> String {
+    // DariaTech: Anzeigename mit Leerzeichen fuer UI-Texte; der technische
+    // APP_NAME (Pfade/Dienste) bleibt der shell-sichere Bindestrich-Name.
+    "DariaTech Fernwartung".to_owned()
+}
+
+#[inline]
 pub fn is_rustdesk() -> bool {
     hbb_common::config::APP_NAME.read().unwrap().eq("RustDesk")
 }

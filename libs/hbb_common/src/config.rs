@@ -108,9 +108,12 @@ lazy_static::lazy_static! {
     static ref ONLINE: Mutex<HashMap<String, i64>> = Default::default();
     pub static ref PROD_RENDEZVOUS_SERVER: RwLock<String> = RwLock::new("".to_owned());
     pub static ref EXE_RENDEZVOUS_SERVER: RwLock<String> = Default::default();
-    // DariaTech: Whitelabel-Anzeigename. Steuert App-/Dienstnamen, Installationspfade,
-    // macOS-Bundle-Pfade und die RustDesk->Name-Ersetzung in allen UI-Texten (src/lang.rs).
-    pub static ref APP_NAME: RwLock<String> = RwLock::new("DariaTech Fernwartung".to_owned());
+    // DariaTech: technischer Whitelabel-Name (Dienste, Pfade, Bundle, EXE).
+    // Bewusst OHNE Leerzeichen: Leerzeichen brechen unquotierte Shell-Pfade
+    // (install.scpt, sc/reg-Batches) und ergeben je Plattform unterschiedliche
+    // Verzeichnisnamen (directories-Crate: macOS ersetzt " "->"-", Linux entfernt sie).
+    // Der Anzeigename "DariaTech Fernwartung" kommt aus get_app_display_name().
+    pub static ref APP_NAME: RwLock<String> = RwLock::new("DariaTech-Fernwartung".to_owned());
     static ref KEY_PAIR: Mutex<Option<KeyPair>> = Default::default();
     static ref USER_DEFAULT_CONFIG: RwLock<(UserDefaultConfig, Instant)> = RwLock::new((UserDefaultConfig::load(), Instant::now()));
     pub static ref NEW_STORED_PEER_CONFIG: Mutex<HashSet<String>> = Default::default();

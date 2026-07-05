@@ -4,13 +4,21 @@ Diese Datei dokumentiert die Personalisierung von RustDesk zu **DariaTech Fernwa
 
 ## Konzept
 
-- **App-Name überall**: `DariaTech Fernwartung` — als Whitelabel über den zentralen
-  `APP_NAME` in `libs/hbb_common/src/config.rs`. Daraus leiten sich automatisch ab:
+- **Zwei Namensebenen**:
+  - **Anzeigename** `DariaTech Fernwartung` (mit Leerzeichen) — erscheint in allen
+    UI-Texten (`src/lang.rs` nutzt `get_app_display_name()`), Fenstertiteln,
+    macOS-Finder/Dock (`CFBundleDisplayName`) und im Windows-„Apps & Features“-Eintrag.
+  - **Technischer Name** `DariaTech-Fernwartung` (Bindestrich) — der zentrale
+    `APP_NAME` in `libs/hbb_common/src/config.rs`. Bewusst ohne Leerzeichen:
+    Leerzeichen brechen unquotierte Shell-Pfade (macOS install.scpt, Windows
+    sc/reg-Batches) und ergeben je Plattform unterschiedliche Verzeichnisnamen
+    (directories-Crate: macOS ersetzt Leerzeichen durch `-`, Linux entfernt sie).
+    Daraus leiten sich automatisch ab:
   - alle UI-Texte (die Übersetzungsschicht `src/lang.rs` ersetzt „RustDesk“ durch den App-Namen),
-  - Windows: Installationsordner `C:\Program Files\DariaTech Fernwartung`, installierte
-    `DariaTech Fernwartung.exe`, Dienstname, Startmenü-/Uninstall-Einträge (MSI via
+  - Windows: Installationsordner `C:\Program Files\DariaTech-Fernwartung`, installierte
+    `DariaTech-Fernwartung.exe`, Dienstname, Startmenü-/Uninstall-Einträge (MSI via
     `preprocess.py --app-name`),
-  - macOS: `DariaTech Fernwartung.app` (`PRODUCT_NAME` in
+  - macOS: `DariaTech-Fernwartung.app` (`PRODUCT_NAME` in
     `flutter/macos/Runner/Configs/AppInfo.xcconfig`), LaunchDaemon-/Agent-Pfade
     (zur Laufzeit via `correct_app_name()`),
   - Konfigurations-/Log-Verzeichnisse.
@@ -21,6 +29,8 @@ Diese Datei dokumentiert die Personalisierung von RustDesk zu **DariaTech Fernwa
   Linux-Desktop-Datei/MSI registrieren das Schema statisch.
 - Interner Binärname der Roh-Artefakte bleibt `rustdesk` (z. B. `rustdesk-1.4.6-x86_64.exe`
   als Download); bei der Installation wird auf den Markennamen umbenannt.
+- **Linux**: Das Binary heißt weiterhin `rustdesk` (deb/rpm-Paketierung); Prozess-
+  Matching und `/etc`-Pfade sind im Code fest darauf gepinnt.
 - Attribution **„Powered by RustDesk"** wird unten im Startbildschirm und im About-Dialog angezeigt
   (Open-Source-Projekt fair gewürdigt); Upstream-Update-Checks sind im Whitelabel-Modus
   automatisch deaktiviert.
