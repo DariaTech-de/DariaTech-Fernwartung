@@ -22,6 +22,9 @@ cert.pfx
 !flutter/assets/logo.png
 !flutter/assets/icon.png
 !flutter/assets/icon.svg
+!flutter/assets/*.svg
+!flutter/assets/scam.png
+!flutter/ios/Runner/Assets.xcassets/LaunchImage.imageset/*.png
 !res/icon.png
 !res/32x32.png
 !res/64x64.png

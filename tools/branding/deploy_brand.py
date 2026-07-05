@@ -166,6 +166,12 @@ def main():
         size = round(float(m.group(1)) * int(m.group(2)))
         save(square_icon(size, opaque=True), f"{ios_dir}/{fn}")
 
+    # ---------- iOS launch image (referenced by LaunchImage.imageset) ----------
+    li_dir = "flutter/ios/Runner/Assets.xcassets/LaunchImage.imageset"
+    for scale, fn in [(1, "LaunchImage.png"), (2, "LaunchImage@2x.png"),
+                      (3, "LaunchImage@3x.png")]:
+        save(square_icon(160 * scale, opaque=False, radius=0.20), f"{li_dir}/{fn}")
+
     # ---------- Android ----------
     and_res = "flutter/android/app/src/main/res"
     dens = {"mdpi": 1, "hdpi": 1.5, "xhdpi": 2, "xxhdpi": 3, "xxxhdpi": 4}
@@ -178,6 +184,11 @@ def main():
         # splash screen image referenced by drawable/launch_background.xml
         save(square_icon(round(160 * m), opaque=False, radius=0.20),
              f"{and_res}/mipmap-{d}/launch_image.png")
+        # notification status icon (MainService: R.mipmap.ic_stat_logo),
+        # Android erwartet weisse Silhouette auf Transparenz, 24dp Basis
+        save(G.draw_mark(round(24 * m), bg=None, pad_frac=0.08,
+                         fg=(255, 255, 255)),
+             f"{and_res}/mipmap-{d}/ic_stat_logo.png")
     # background color -> green
     bgxml = os.path.join(REPO, and_res, "values/ic_launcher_background.xml")
     with open(bgxml, "w") as f:
