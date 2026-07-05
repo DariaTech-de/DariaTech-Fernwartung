@@ -59,7 +59,7 @@ Markenfarben: Grün `#09250F`, Teal `#01C4A6`.
 
 ### Neu erzeugen
 
-Die Assets wurden mit Python (Pillow + cairosvg) generiert. Die Skripte liegen unter
+Die Assets werden mit Python (Pillow) generiert. Die Skripte liegen unter
 `tools/branding/` und können nach einer Logo-Aktualisierung erneut ausgeführt werden:
 
 ```bash
@@ -67,7 +67,18 @@ cd tools/branding
 python3 deploy_brand.py   # schreibt alle Asset-Dateien ins Repo
 ```
 
-> Hinweis: `.gitignore` ignoriert `*png/*svg/*jpg`; neue Bilddateien müssen mit
-> `git add -f <datei>` aufgenommen werden (bereits getrackte werden normal aktualisiert).
+- Liegt das Original-Logo als `tools/branding/source-logo.png` vor, wird das
+  Header-Logo daraus ausgeschnitten; **fehlt es, erzeugt das Skript automatisch
+  einen gleichwertigen Banner** (Mark + „DariaTech / IT SYSTEMHAUS“) aus den
+  Vektordaten.
+- Das Skript erzeugt zusätzlich: `res/scalable.svg` (Linux-Pakete),
+  `res/mac-tray-*.png` (macOS-Menüleiste, compile-time eingebettet),
+  `libs/portable/src/res/label.png` (Windows-Portable-Installer) und die
+  Android-`launch_image`-Splash-Bilder.
+
+> Hinweis: `.gitignore` ignoriert `*png/*svg/*jpg` global, enthält aber
+> **explizite Ausnahmen (`!…`) für alle Branding-Assets** – sie sind damit normal
+> versioniert. Ohne diese Dateien schlagen die CI-Builds fehl (Android-Icons,
+> `label.png`, `mac-tray-*.png` werden zur Compile-Zeit gebraucht).
 
 Nach Asset-Änderungen neu bauen (siehe `build.py` / `flutter/README.md`).

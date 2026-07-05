@@ -1,0 +1,22 @@
+# DariaTech: Manuell auslösbarer Build aller Installer (Windows, macOS, Linux,
+# Android, iOS). Ergebnis erscheint als Pre-Release unter dem angegebenen Tag;
+# zusätzlich hängen die Rohdateien als Artifacts am Workflow-Lauf.
+# Start: GitHub → Actions → "DariaTech Release Build" → Run workflow
+name: DariaTech Release Build
+
+on:
+  workflow_dispatch:
+    inputs:
+      upload-tag:
+        description: "Release-Tag, unter dem die Installer veröffentlicht werden"
+        required: false
+        default: "fernwartung"
+        type: string
+
+jobs:
+  run-daria-release-build:
+    uses: ./.github/workflows/flutter-build.yml
+    secrets: inherit
+    with:
+      upload-artifact: true
+      upload-tag: ${{ inputs.upload-tag }}
