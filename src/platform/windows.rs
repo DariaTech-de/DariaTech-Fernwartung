@@ -1389,7 +1389,7 @@ fn get_after_install(
     reg_value_printer: Option<String>,
 ) -> String {
     let app_name = crate::get_app_name();
-    let ext = app_name.to_lowercase();
+    let ext = "rustdesk".to_owned(); // DariaTech: URL-Schema/Dateiendung bleiben "rustdesk" (siehe get_uri_prefix)
 
     // reg delete HKEY_CURRENT_USER\Software\Classes for
     // https://github.com/rustdesk/rustdesk/commit/f4bdfb6936ae4804fc8ab1cf560db192622ad01a
@@ -1590,6 +1590,7 @@ copy /Y \"{tmp_path}\\{app_name} Tray.lnk\" \"%PROGRAMDATA%\\Microsoft\\Windows\
     // Remember to check if `update_me` need to be changed if changing the `cmds`.
     // No need to merge the existing dup code, because the code in these two functions are too critical.
     // New code should be written in a common function.
+    let display_name = crate::common::get_app_display_name();
     let cmds = format!(
         "
 {uninstall_str}
@@ -1598,12 +1599,12 @@ md \"{path}\"
 {copy_exe}
 reg add {subkey} /f
 reg add {subkey} /f /v DisplayIcon /t REG_SZ /d \"{display_icon}\"
-reg add {subkey} /f /v DisplayName /t REG_SZ /d \"{app_name}\"
+reg add {subkey} /f /v DisplayName /t REG_SZ /d \"{display_name}\"
 reg add {subkey} /f /v DisplayVersion /t REG_SZ /d \"{version}\"
 reg add {subkey} /f /v Version /t REG_SZ /d \"{version}\"
 reg add {subkey} /f /v BuildDate /t REG_SZ /d \"{build_date}\"
 reg add {subkey} /f /v InstallLocation /t REG_SZ /d \"{path}\"
-reg add {subkey} /f /v Publisher /t REG_SZ /d \"{app_name}\"
+reg add {subkey} /f /v Publisher /t REG_SZ /d \"DariaTech\"
 reg add {subkey} /f /v VersionMajor /t REG_DWORD /d {version_major}
 reg add {subkey} /f /v VersionMinor /t REG_DWORD /d {version_minor}
 reg add {subkey} /f /v VersionBuild /t REG_DWORD /d {version_build}
@@ -1655,7 +1656,7 @@ pub fn run_before_uninstall() -> ResultType<()> {
 
 fn get_before_uninstall(kill_self: bool) -> String {
     let app_name = crate::get_app_name();
-    let ext = app_name.to_lowercase();
+    let ext = "rustdesk".to_owned(); // DariaTech: URL-Schema/Dateiendung bleiben "rustdesk" (siehe get_uri_prefix)
     let filter = if kill_self {
         "".to_string()
     } else {
@@ -2034,7 +2035,7 @@ pub fn update_install_option(k: &str, v: &str) -> ResultType<()> {
         return Ok(());
     }
     let app_name = crate::get_app_name();
-    let ext = app_name.to_lowercase();
+    let ext = "rustdesk".to_owned(); // DariaTech: URL-Schema/Dateiendung bleiben "rustdesk" (siehe get_uri_prefix)
     let cmds =
         format!("chcp 65001 && reg add HKEY_CLASSES_ROOT\\.{ext} /f /v {k} /t REG_SZ /d \"{v}\"");
     run_cmds(cmds, false, "update_install_option")?;

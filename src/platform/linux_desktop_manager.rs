@@ -672,7 +672,7 @@ impl DesktopManager {
     ) -> ResultType<Child> {
         let xorg = Self::get_xorg();
         log::info!("Use xorg: {}", &xorg);
-        let app_name = crate::get_app_name().to_lowercase();
+        let app_name = "rustdesk".to_owned(); // DariaTech: /etc-Dateien kommen aus dem deb-Paket (rustdesk)
         let conf = format!("/etc/{app_name}/xorg.conf");
         match Command::new(xorg)
             .envs(envs)
@@ -706,7 +706,7 @@ impl DesktopManager {
         gid: u32,
         envs: &HashMap<&str, String>,
     ) -> ResultType<Child> {
-        let app_name = crate::get_app_name().to_lowercase();
+        let app_name = "rustdesk".to_owned(); // DariaTech: /etc-Dateien kommen aus dem deb-Paket (rustdesk)
         match Command::new(&format!("/etc/{app_name}/startwm.sh"))
             .envs(envs)
             .uid(uid)
@@ -735,7 +735,7 @@ impl DesktopManager {
 }
 
 fn pam_get_service_name() -> String {
-    let app_name = crate::get_app_name().to_lowercase();
+    let app_name = "rustdesk".to_owned(); // DariaTech: /etc-Dateien kommen aus dem deb-Paket (rustdesk)
     if Path::new(&format!("/etc/pam.d/{app_name}")).is_file() {
         app_name
     } else {

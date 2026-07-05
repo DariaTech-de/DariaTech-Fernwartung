@@ -670,7 +670,7 @@ fn set_x11_env(desktop: &Desktop) {
 fn stop_rustdesk_servers() {
     let _ = run_cmds(&format!(
         r##"ps -ef | grep -E '{} +--server' | awk '{{print $2}}' | xargs -r kill -9"##,
-        crate::get_app_name().to_lowercase(),
+        "rustdesk".to_owned() /* DariaTech: Linux-Binary heisst weiterhin rustdesk */,
     ));
 }
 
@@ -678,11 +678,11 @@ fn stop_rustdesk_servers() {
 fn stop_subprocess() {
     let _ = run_cmds(&format!(
         r##"ps -ef | grep '/etc/{}/xorg.conf' | grep -v grep | awk '{{print $2}}' | xargs -r kill -9"##,
-        crate::get_app_name().to_lowercase(),
+        "rustdesk".to_owned() /* DariaTech: Linux-Binary heisst weiterhin rustdesk */,
     ));
     let _ = run_cmds(&format!(
         r##"ps -ef | grep -E '{} +--cm-no-ui' | grep -v grep | awk '{{print $2}}' | xargs -r kill -9"##,
-        crate::get_app_name().to_lowercase(),
+        "rustdesk".to_owned() /* DariaTech: Linux-Binary heisst weiterhin rustdesk */,
     ));
 }
 
@@ -1633,7 +1633,7 @@ mod desktop {
         }
 
         fn get_display_xauth_xwayland(&mut self) {
-            let tray = format!("{} +--tray", crate::get_app_name().to_lowercase());
+            let tray = format!("{} +--tray", "rustdesk" /* DariaTech: Binaername */);
             for _ in 1..=10 {
                 let display_proc = vec![
                     XDG_DESKTOP_PORTAL,
@@ -1743,7 +1743,7 @@ mod desktop {
 
         fn get_xauth_x11(&mut self) {
             // try by direct access to window manager process by name
-            let tray = format!("{} +--tray", crate::get_app_name().to_lowercase());
+            let tray = format!("{} +--tray", "rustdesk" /* DariaTech: Binaername */);
             for _ in 1..=10 {
                 let display_proc = vec![
                     XWAYLAND,
@@ -1842,7 +1842,7 @@ mod desktop {
             self.is_rustdesk_subprocess = false;
             let cmd = format!(
                 "ps -ef | grep '{}/xorg.conf' | grep -v grep | wc -l",
-                crate::get_app_name().to_lowercase()
+                "rustdesk" // DariaTech: Binaername
             );
             if let Ok(res) = run_cmds(&cmd) {
                 if res.trim() != "0" {

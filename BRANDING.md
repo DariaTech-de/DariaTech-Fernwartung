@@ -4,14 +4,38 @@ Diese Datei dokumentiert die Personalisierung von RustDesk zu **DariaTech Fernwa
 
 ## Konzept
 
-- **Sichtbarer Name** (Fenster­titel, App-Liste, Installer, About-Dialog): `DariaTech Fernwartung`
-- **Interne Identität** bleibt bewusst `rustdesk` / `RustDesk`
-  (Binärname `rustdesk.exe`, Datenverzeichnis, Dienst, Registry, URI-Schema `rustdesk://`).
-  Dadurch bricht kein Build und keine bestehende Logik.
+- **Zwei Namensebenen**:
+  - **Anzeigename** `DariaTech Fernwartung` (mit Leerzeichen) — erscheint in allen
+    UI-Texten (`src/lang.rs` nutzt `get_app_display_name()`), Fenstertiteln,
+    macOS-Finder/Dock (`CFBundleDisplayName`) und im Windows-„Apps & Features“-Eintrag.
+  - **Technischer Name** `DariaTech-Fernwartung` (Bindestrich) — der zentrale
+    `APP_NAME` in `libs/hbb_common/src/config.rs`. Bewusst ohne Leerzeichen:
+    Leerzeichen brechen unquotierte Shell-Pfade (macOS install.scpt, Windows
+    sc/reg-Batches) und ergeben je Plattform unterschiedliche Verzeichnisnamen
+    (directories-Crate: macOS ersetzt Leerzeichen durch `-`, Linux entfernt sie).
+    Daraus leiten sich automatisch ab:
+  - alle UI-Texte (die Übersetzungsschicht `src/lang.rs` ersetzt „RustDesk“ durch den App-Namen),
+  - Windows: Installationsordner `C:\Program Files\DariaTech-Fernwartung`, installierte
+    `DariaTech-Fernwartung.exe`, Dienstname, Startmenü-/Uninstall-Einträge (MSI via
+    `preprocess.py --app-name`),
+  - macOS: `DariaTech-Fernwartung.app` (`PRODUCT_NAME` in
+    `flutter/macos/Runner/Configs/AppInfo.xcconfig`), LaunchDaemon-/Agent-Pfade
+    (zur Laufzeit via `correct_app_name()`),
+  - Konfigurations-/Log-Verzeichnisse.
+- `libs/hbb_common` ist **kein Submodule mehr**, sondern fest eingecheckt (vendored),
+  damit der `APP_NAME`-Patch versioniert ist. Basis: `rustdesk/hbb_common@42af0f0a`.
+- **URI-Schema bleibt `rustdesk://`** (`get_uri_prefix()` in `src/common.rs` fest
+  verdrahtet): URL-Schemata dürfen keine Leerzeichen enthalten, und Android/iOS/
+  Linux-Desktop-Datei/MSI registrieren das Schema statisch.
+- Interner Binärname der Roh-Artefakte bleibt `rustdesk` (z. B. `rustdesk-1.4.6-x86_64.exe`
+  als Download); bei der Installation wird auf den Markennamen umbenannt.
+- **Linux**: Das Binary heißt weiterhin `rustdesk` (deb/rpm-Paketierung); Prozess-
+  Matching und `/etc`-Pfade sind im Code fest darauf gepinnt.
 - Attribution **„Powered by RustDesk"** wird unten im Startbildschirm und im About-Dialog angezeigt
-  (Open-Source-Projekt fair gewürdigt).
+  (Open-Source-Projekt fair gewürdigt); Upstream-Update-Checks sind im Whitelabel-Modus
+  automatisch deaktiviert.
 
-Der zentrale Anzeige-Name liegt in `flutter/lib/consts.dart` als `kAppBrandName`.
+Der Anzeige-Name für die Flutter-UI liegt zusätzlich in `flutter/lib/consts.dart` als `kAppBrandName`.
 
 ## Bereits umgesetzt (Name)
 
