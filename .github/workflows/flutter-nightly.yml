@@ -1,5 +1,9 @@
 name: Flutter Nightly Build
 
+# DariaTech: Schreibrechte fuer das Anlegen des Releases (Tag + Dateien)
+permissions:
+  contents: write
+
 on:
   # DariaTech: naechtlicher Auto-Build deaktiviert (spart Actions-Minuten).
   # Fuer On-Demand-Builds den Workflow "DariaTech Release Build" verwenden
