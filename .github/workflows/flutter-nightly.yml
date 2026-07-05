@@ -1,9 +1,11 @@
 name: Flutter Nightly Build
 
 on:
-  schedule:
-    # schedule build every night
-    - cron: "0 0 * * *"
+  # DariaTech: naechtlicher Auto-Build deaktiviert (spart Actions-Minuten).
+  # Fuer On-Demand-Builds den Workflow "DariaTech Release Build" verwenden
+  # (daria-release.yml) oder hier manuell ausloesen.
+  # schedule:
+  #   - cron: "0 0 * * *"
   workflow_dispatch:
 
 jobs:
