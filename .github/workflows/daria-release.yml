@@ -4,6 +4,11 @@
 # Start: GitHub → Actions → "DariaTech Release Build" → Run workflow
 name: DariaTech Release Build
 
+# softprops/action-gh-release braucht Schreibrechte, um das Release
+# (Tag + Installer-Dateien) anzulegen - Repo-Standard ist nur Lesen.
+permissions:
+  contents: write
+
 on:
   workflow_dispatch:
     inputs:

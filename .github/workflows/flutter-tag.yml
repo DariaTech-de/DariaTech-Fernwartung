@@ -1,5 +1,9 @@
 name: Flutter Tag Build
 
+# DariaTech: Schreibrechte fuer das Anlegen des Releases (Tag + Dateien)
+permissions:
+  contents: write
+
 on:
   workflow_dispatch:
   push:
