@@ -90,6 +90,12 @@ git push origin v1.4.6-1
   `ANDROID_SIGNING_KEY`, `MACOS_P12_BASE64`, …) werden die Signier-Schritte
   automatisch übersprungen; die Installer funktionieren, lösen aber
   SmartScreen-/Gatekeeper-Warnungen aus (siehe Kunden-Anleitung).
+  - **macOS zeigt bei unsignierten Apps „beschädigt“** — Abhilfe beim Kunden:
+    `xattr -cr "/Applications/DariaTech Fernwartung.app"` (steht in der Kunden-Anleitung).
+    Dauerhafte Lösung: Apple-Developer-Konto (99 €/Jahr), dann die Secrets
+    `MACOS_P12_BASE64`, `MACOS_P12_PASSWORD`, `MACOS_CODESIGN_IDENTITY` und
+    `MACOS_NOTARIZE_JSON` im Repo hinterlegen — der Workflow signiert und
+    notarisiert dann automatisch.
 - Die Versionsnummer steht in `.github/workflows/flutter-build.yml`
   (Variable `VERSION`) sowie in `Cargo.toml` / `flutter/pubspec.yaml`.
 - Einzelne fehlgeschlagene Plattform-Jobs stoppen die anderen nicht

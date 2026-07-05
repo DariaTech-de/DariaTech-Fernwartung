@@ -4,14 +4,28 @@ Diese Datei dokumentiert die Personalisierung von RustDesk zu **DariaTech Fernwa
 
 ## Konzept
 
-- **Sichtbarer Name** (Fenster­titel, App-Liste, Installer, About-Dialog): `DariaTech Fernwartung`
-- **Interne Identität** bleibt bewusst `rustdesk` / `RustDesk`
-  (Binärname `rustdesk.exe`, Datenverzeichnis, Dienst, Registry, URI-Schema `rustdesk://`).
-  Dadurch bricht kein Build und keine bestehende Logik.
+- **App-Name überall**: `DariaTech Fernwartung` — als Whitelabel über den zentralen
+  `APP_NAME` in `libs/hbb_common/src/config.rs`. Daraus leiten sich automatisch ab:
+  - alle UI-Texte (die Übersetzungsschicht `src/lang.rs` ersetzt „RustDesk“ durch den App-Namen),
+  - Windows: Installationsordner `C:\Program Files\DariaTech Fernwartung`, installierte
+    `DariaTech Fernwartung.exe`, Dienstname, Startmenü-/Uninstall-Einträge (MSI via
+    `preprocess.py --app-name`),
+  - macOS: `DariaTech Fernwartung.app` (`PRODUCT_NAME` in
+    `flutter/macos/Runner/Configs/AppInfo.xcconfig`), LaunchDaemon-/Agent-Pfade
+    (zur Laufzeit via `correct_app_name()`),
+  - Konfigurations-/Log-Verzeichnisse.
+- `libs/hbb_common` ist **kein Submodule mehr**, sondern fest eingecheckt (vendored),
+  damit der `APP_NAME`-Patch versioniert ist. Basis: `rustdesk/hbb_common@42af0f0a`.
+- **URI-Schema bleibt `rustdesk://`** (`get_uri_prefix()` in `src/common.rs` fest
+  verdrahtet): URL-Schemata dürfen keine Leerzeichen enthalten, und Android/iOS/
+  Linux-Desktop-Datei/MSI registrieren das Schema statisch.
+- Interner Binärname der Roh-Artefakte bleibt `rustdesk` (z. B. `rustdesk-1.4.6-x86_64.exe`
+  als Download); bei der Installation wird auf den Markennamen umbenannt.
 - Attribution **„Powered by RustDesk"** wird unten im Startbildschirm und im About-Dialog angezeigt
-  (Open-Source-Projekt fair gewürdigt).
+  (Open-Source-Projekt fair gewürdigt); Upstream-Update-Checks sind im Whitelabel-Modus
+  automatisch deaktiviert.
 
-Der zentrale Anzeige-Name liegt in `flutter/lib/consts.dart` als `kAppBrandName`.
+Der Anzeige-Name für die Flutter-UI liegt zusätzlich in `flutter/lib/consts.dart` als `kAppBrandName`.
 
 ## Bereits umgesetzt (Name)
 

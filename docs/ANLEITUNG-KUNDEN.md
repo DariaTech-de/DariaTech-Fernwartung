@@ -29,6 +29,26 @@ Die Einrichtung dauert etwa 2 Minuten.
    Microsoft zertifiziert ist – es stammt direkt von DariaTech.
 3. Bestätigen Sie ggf. die Windows-Firewall-Nachfrage mit **Zugriff zulassen**.
 
+## 2b. Programm starten (macOS)
+
+1. Öffnen Sie die heruntergeladene `.dmg`-Datei und ziehen Sie
+   **DariaTech Fernwartung** in den Ordner **Programme**.
+2. Beim ersten Start kann macOS melden, die App sei **„beschädigt und muss in den
+   Papierkorb gelegt werden“**. Die App ist **nicht beschädigt** — die Meldung
+   erscheint, weil die App nicht über den Apple App Store verteilt wird.
+   So geben Sie die App einmalig frei:
+   - Öffnen Sie das Programm **Terminal** (über die Spotlight-Suche, Lupe oben rechts) und
+     fügen Sie diese Zeile ein, dann Eingabetaste drücken:
+     ```
+     xattr -cr "/Applications/DariaTech Fernwartung.app"
+     ```
+   - Starten Sie die App danach normal über den Programme-Ordner.
+   - Alternativ: **Systemeinstellungen → Datenschutz & Sicherheit** → unten bei der
+     blockierten App auf **„Dennoch öffnen“** klicken (falls angeboten).
+3. Erlauben Sie beim ersten Start die abgefragten Rechte (**Bildschirmaufnahme** und
+   **Bedienungshilfen**) in den Systemeinstellungen — sonst sieht der Techniker nur
+   ein schwarzes Bild.
+
 ## 3. Dem Techniker Zugriff geben
 
 Nach dem Start sehen Sie links im Fenster:
