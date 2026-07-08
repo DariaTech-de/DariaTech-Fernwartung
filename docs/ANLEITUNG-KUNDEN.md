@@ -33,16 +33,21 @@ Die Einrichtung dauert etwa 2 Minuten.
 
 1. Öffnen Sie die heruntergeladene `.dmg`-Datei und ziehen Sie
    **DariaTech Fernwartung** in den Ordner **Programme**.
-2. Beim ersten Start kann macOS melden, die App sei **„beschädigt und muss in den
-   Papierkorb gelegt werden“**. Die App ist **nicht beschädigt** — die Meldung
-   erscheint, weil die App nicht über den Apple App Store verteilt wird.
-   So geben Sie die App einmalig frei:
-   - Öffnen Sie das Programm **Terminal** (über die Spotlight-Suche, Lupe oben rechts) und
-     fügen Sie diese Zeile ein, dann Eingabetaste drücken:
+2. **Öffnen Sie die App per Rechtsklick** (nicht per Doppelklick): Rechtsklick
+   (bzw. Ctrl-Klick) auf **DariaTech Fernwartung** im Programme-Ordner →
+   **Öffnen** → im Dialog erneut auf **Öffnen**. Das ist nur beim ersten Mal nötig;
+   danach startet die App per Doppelklick.
+   - Erscheint stattdessen die Meldung **„beschädigt und muss in den Papierkorb
+     gelegt werden“**, ist die App **nicht defekt** — macOS blockiert sie nur, weil
+     sie nicht von Apple zertifiziert ist. Geben Sie sie dann einmalig über das
+     **Terminal** frei (Spotlight-Suche → „Terminal“). Kopieren Sie **beide Zeilen**
+     hinein und drücken Sie nach jeder die Eingabetaste:
      ```
      xattr -cr "/Applications/DariaTech-Fernwartung.app"
+     codesign --force --deep --sign - "/Applications/DariaTech-Fernwartung.app"
      ```
-   - Starten Sie die App danach normal über den Programme-Ordner.
+     Danach die App normal öffnen. (Die zweite Zeile „repariert“ die Signatur der
+     App — nur `xattr` allein reicht bei dieser Meldung **nicht**.)
    - Alternativ: **Systemeinstellungen → Datenschutz & Sicherheit** → unten bei der
      blockierten App auf **„Dennoch öffnen“** klicken (falls angeboten).
 3. Erlauben Sie beim ersten Start die abgefragten Rechte (**Bildschirmaufnahme** und

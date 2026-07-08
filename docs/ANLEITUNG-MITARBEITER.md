@@ -90,12 +90,23 @@ git push origin v1.4.6-1
   `ANDROID_SIGNING_KEY`, `MACOS_P12_BASE64`, …) werden die Signier-Schritte
   automatisch übersprungen; die Installer funktionieren, lösen aber
   SmartScreen-/Gatekeeper-Warnungen aus (siehe Kunden-Anleitung).
-  - **macOS zeigt bei unsignierten Apps „beschädigt“** — Abhilfe beim Kunden:
-    `xattr -cr "/Applications/DariaTech-Fernwartung.app"` (steht in der Kunden-Anleitung).
-    Dauerhafte Lösung: Apple-Developer-Konto (99 €/Jahr), dann die Secrets
-    `MACOS_P12_BASE64`, `MACOS_P12_PASSWORD`, `MACOS_CODESIGN_IDENTITY` und
-    `MACOS_NOTARIZE_JSON` im Repo hinterlegen — der Workflow signiert und
-    notarisiert dann automatisch.
+  - **macOS „beschädigt“-Meldung (Apple Silicon):** Ursache war ein *kaputtes*
+    Signatur-Siegel — `build.py` kopiert die `service`-Binärdatei nach dem
+    Flutter-Build ins App-Bundle, was die automatische ad-hoc-Signatur ungültig
+    macht; auf ARM-Macs ergibt das die harte „beschädigt“-Meldung. **Behoben:**
+    `build.py` signiert das Bundle danach neu ad-hoc
+    (`codesign --force --deep --sign -`, ohne Zertifikat). Seit diesem Build lässt
+    sich die App per **Rechtsklick → Öffnen** starten.
+  - Alte/kaputte Downloads reparieren (beide Zeilen im Terminal):
+    `xattr -cr "/Applications/DariaTech-Fernwartung.app"` **und**
+    `codesign --force --deep --sign - "/Applications/DariaTech-Fernwartung.app"`.
+    `xattr` allein genügt bei „beschädigt“ **nicht** — die Signatur muss neu
+    gesetzt werden.
+  - Ganz ohne Warnung geht es nur mit **Apple-Developer-Konto** (99 €/Jahr): dann
+    die Secrets `MACOS_P12_BASE64`, `MACOS_P12_PASSWORD`, `MACOS_CODESIGN_IDENTITY`
+    und `MACOS_NOTARIZE_JSON` im Repo hinterlegen — der Workflow signiert und
+    notarisiert automatisch (der ad-hoc-Schritt wird dann durch die echte
+    Developer-ID überschrieben).
 - Die Versionsnummer steht in `.github/workflows/flutter-build.yml`
   (Variable `VERSION`) sowie in `Cargo.toml` / `flutter/pubspec.yaml`.
 - Einzelne fehlgeschlagene Plattform-Jobs stoppen die anderen nicht
