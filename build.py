@@ -411,7 +411,17 @@ def build_flutter_dmg(version, features):
         "cp target/release/liblibrustdesk.dylib target/release/librustdesk.dylib")
     os.chdir('flutter')
     system2('flutter build macos --release')
-    system2('cp -rf ../target/release/service "./build/macos/Build/Products/Release/DariaTech-Fernwartung.app/Contents/MacOS/"')
+    app_bundle = './build/macos/Build/Products/Release/DariaTech-Fernwartung.app'
+    system2(f'cp -rf ../target/release/service "{app_bundle}/Contents/MacOS/"')
+    # DariaTech: Das Einkopieren von `service` NACH dem Flutter-Build macht die
+    # ad-hoc-Signatur ungueltig, die Apples Linker auf Apple-Silicon automatisch
+    # anlegt. Ein kaputtes Siegel + Quarantaene ergibt auf ARM-Macs die Meldung
+    # "ist beschaedigt und kann nicht geoeffnet werden" (statt des normalen
+    # "nicht verifizierter Entwickler"-Dialogs). Das Bundle daher neu ad-hoc
+    # signieren (--sign - braucht kein Zertifikat), damit es startbar bleibt.
+    # Auf dem signierten CI-Pfad ueberschreibt `codesign -s <identity> --force`
+    # diese Signatur spaeter mit der echten Developer-ID.
+    system2(f'codesign --force --deep --sign - "{app_bundle}"')
     '''
     system2(
         "create-dmg --volname \"RustDesk Installer\" --window-pos 200 120 --window-size 800 400 --icon-size 100 --app-drop-link 600 185 --icon RustDesk.app 200 190 --hide-extension RustDesk.app rustdesk.dmg ./build/macos/Build/Products/Release/RustDesk.app")
